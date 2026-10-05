@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tienda Online</title>
+    </head>
+    <body>
+        BIENVENIDOS A LA TIENDA
+        <br><br><br><br>
+        <?php
+        if(isset($_SESSION['user'])){
+            echo "BIENVENIDO ".$_SESSION['user']->getUserName();
+        }else{
+            echo "<a href='index.php?login'>LOGIN</a>";
+        }
+            foreach($products as $product){
+                echo $product->name;
+                echo $product->price;
+                echo $product->stock;
+            }
+
+        ?>
+    </body>
+</html>
