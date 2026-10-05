@@ -1,62 +1,49 @@
-<?php   
-//cargar modelos
+<?php
+
+// Cargar modelos
+require_once("models/User.php");
+require_once("models/Product.php");
 require_once("models/Order.php");
 require_once("models/OrderLine.php");
-require_once("models/Product.php");
-require_once("models/User.php");
-require_once("repositories/OrderRepository.php");
-require_once("repositories/OrderLineRepository.php");
+
+// Cargar repositorios
 require_once("repositories/ProductRepository.php");
+require_once("repositories/OrderRepository.php");
 require_once("repositories/UserRepository.php");
+require_once("repositories/OrderLineRepository.php");
 
-session_start();
-
-if(isset($_GET['c'])){
-    require_once("controllers/".$_GET['c']."Controller.php");
-    exit;
-}   
-
-
-//acciones
-
-//listar productos
-function listProducts(){
-    $productRepository = new ProductRepository();
-    $products = $productRepository->getAllProducts();
-    require_once("views/listProducts.php");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-//login
+// Enrutador de controladores específicos
+if(isset($_GET['c'])){
+    $controller = strtolower($_GET['c']);
+    $controllerFile = "controllers/" . $controller . "Controller.php";
+    if(file_exists($controllerFile)){
+        require_once($controllerFile);
+        exit;
+    }
+}
 
-
-//ver login 
+// Rutas de autenticación y vistas
 if(isset($_GET['login'])){
     require_once("views/login.phtml");
     exit;
 }
 
-//logout
 if(isset($_GET['logout'])){
-    require_once("views/logout.phtml");
-    exit;   
+    session_destroy();
+    header("Location: index.php");
+    exit;
 }
-
-//register
 
 if(isset($_GET['register'])){
     require_once("views/register.phtml");
     exit;
 }
 
-//añadir al carrito
-
-//terminar pedido
-
-//vista por defecto
-
-
-
-
-
-
+// Vista por defecto: listar productos
+$products = ProductRepository::getProducts();
+require_once("views/mainView.phtml");
 ?>

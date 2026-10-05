@@ -1,17 +1,23 @@
 <?php
-    if(isset($_POST['login'])){
-        if(isset($_POST['username']) && isset($_POST['password'])){
-            $q = "select * from user where username='".$_POST['username']."'";
-            $db=DB->connect();
-            $result = $db->query($q);
-            $stmt->execute();
-            if($row=$result->fetch_assoc()){
-                if($row['password']==md5($_POST['password'])){
-                    $_SESSION['user'] =new User($row['user_id'],$row['username'],$row['password']);
-                }
+
+if(isset($_POST['login'])){
+    if(isset($_POST['username']) && isset($_POST['password'])){
+        $q = "SELECT * FROM users WHERE username = '".$_POST['username']."'";
+        $db = DB::connect();
+        $result = $db->query($q);
+        if($result && $row = $result->fetch_assoc()){
+            if($row['password'] == md5($_POST['password'])){
+                $_SESSION['user'] = new User(
+                    $row['id'] ?? ($row['user_id'] ?? 0),
+                    $row['username'],
+                    $row['password'] ?? '',
+                    $row['email'] ?? '',
+                    $row['role'] ?? 'user'
+                );
             }
-            
         }
-        header('index.php');
-        exit;
     }
+    header("Location: index.php");
+    exit;
+}
+?>

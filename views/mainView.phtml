@@ -1,31 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tienda Online</title>
 </head>
 <body>
-    BIENVENIDOS A ESTA TIENDA
-    <form action="index.php" method="post">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username">
-        <br>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password">
-        <br>
-        <input type="submit" value="Iniciar Sesión">
-    </form>
-
-    <form action="index.php" method="post">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username">
-        <br>
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password">
-        <br>
-        <input type="submit" value="Registrarse">
-    </form>
-
+    <h1>BIENVENIDOS A LA TIENDA</h1>
+    <div style="margin-bottom: 20px;">
+        <?php
+        if(isset($_SESSION['user'])){
+            echo "BIENVENIDO " . htmlspecialchars($_SESSION['user']->getUsername()) . " | <a href='index.php?c=product&new'>Subir producto</a> | <a href='index.php?logout'>Cerrar sesión</a>";
+        } else {
+            echo "<a href='index.php?login'>Iniciar Sesión</a> | <a href='index.php?register'>Registrarse</a>";
+        }
+        ?>
+    </div>
+    <hr>
+    <h2>Productos</h2>
+    <div>
+        <?php
+        if(isset($products) && $products){
+            foreach($products as $product){
+                $name = is_array($product) ? ($product['name'] ?? '') : ($product->name ?? '');
+                $price = is_array($product) ? ($product['price'] ?? '') : ($product->price ?? '');
+                $stock = is_array($product) ? ($product['stock'] ?? '') : ($product->stock ?? '');
+                echo "<p><strong>" . htmlspecialchars($name) . "</strong> - Precio: " . htmlspecialchars($price) . "€ - Stock: " . htmlspecialchars($stock) . "</p>";
+            }
+        } else {
+            echo "<p>No hay productos disponibles.</p>";
+        }
+        ?>
+    </div>
 </body>
 </html>
