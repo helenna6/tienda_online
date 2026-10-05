@@ -5,6 +5,7 @@
         private $order_date;
         private $total_amount;
         private $status;
+        private $orderLines=[];
 
         public function __construct($order_id, $user_id, $order_date, $total_amount, $status){
             $this->order_id = $order_id;
@@ -12,6 +13,7 @@
             $this->order_date = $order_date;
             $this->total_amount = $total_amount;
             $this->status = $status;
+            $this->orderLines = OrderLineRepository::getOrderLinesByOrderId($order_id);
         }
 
         public function getOrderId(){
