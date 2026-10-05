@@ -9,7 +9,7 @@
         <br><br><br><br>
         <?php
         if(isset($_SESSION['user'])){
-            echo "BIENVENIDO ".$_SESSION['user']->getUserName();
+            echo "BIENVENIDO ".$_SESSION['user']->getUserName(). "<a href ='index.php?c=product&new'>Subir producto</a>";
         }else{
             echo "<a href='index.php?login'>LOGIN</a>";
         }

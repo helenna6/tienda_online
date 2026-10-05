@@ -10,6 +10,10 @@ require_once "/repositories/OrderRepository.php";
 require_once "/repositories/UserRepository.php";
 require_once "/repositories/OrderLineRepository.php";
 
+session_start();
+if(isset($_GET['c'])){
+    require_once("controllers/".$_GET['c']."Controller.php");
+}
 // acciones
     //listar productos
     //login
