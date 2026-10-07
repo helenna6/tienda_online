@@ -1,24 +1,47 @@
-<?php 
+<?php
 
-class ProductRepository{
-    
-    public function getProductsByCategoryId($category_id){
+class ProductRepository {
+
+    public static function getProducts() {
         $products = [];
-        $conn = $this->connectDB();
-        $stmt = $conn->prepare("SELECT * FROM products WHERE category_id = ?");
-        $stmt->execute([$category_id]);
-        while($row = $stmt->fetch_assoc()){
-            $products[] = new Product($row['product_id'], $row['name'], $row['description'], $row['price'], $row['stock'], $row['supplier_id'], $row['category_id'], $row['image']);
+        $conn = db::connect();
+
+        $result = $conn->query("SELECT * FROM PRODUCT");
+
+        while ($row = $result->fetch_assoc()) {
+            $products[] = new Product(
+                $row['product_id'],
+                $row['description'],
+                $row['price'],
+                $row['stock']
+            );
         }
+
         return $products;
     }
 
-    public function getProductById($product_id){
-        $conn = $this->connectDB();
-        $stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ?");
-        $stmt->execute([$product_id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return new Product($row['product_id'], $row['name'], $row['description'], $row['price'], $row['stock'], $row['supplier_id'], $row['category_id'], $row['image']);
-    }
+    public static function getProductById($product_id) {
+        $conn = db::connect();
 
+        $stmt = $conn->prepare(
+            "SELECT * FROM PRODUCT WHERE product_id = ?"
+        );
+
+        $stmt->bind_param("i", $product_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        if (!$row) {
+            return null;
+        }
+
+        return new Product(
+            $row['product_id'],
+            $row['description'],
+            $row['price'],
+            $row['stock']
+        );
+    }
 }
