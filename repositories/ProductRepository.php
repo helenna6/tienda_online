@@ -1,43 +1,47 @@
 <?php
 
 class ProductRepository {
-    public static function getProducts(){
-        $db = DB::connect();
-        $query = "SELECT * FROM products";
-        $products = $db->query($query);
+
+    public static function getProducts() {
+        $products = [];
+        $conn = db::connect();
+
+        $result = $conn->query("SELECT * FROM PRODUCT");
+
+        while ($row = $result->fetch_assoc()) {
+            $products[] = new Product(
+                $row['product_id'],
+                $row['description'],
+                $row['price'],
+                $row['stock']
+            );
+        }
+
         return $products;
     }
 
-    public static function getProductById($id){
-        $db = DB::connect();
-        $query = "SELECT * FROM products WHERE id = $id";
-        $product = $db->query($query);
-        return $product;
-    }
+    public static function getProductById($product_id) {
+        $conn = db::connect();
 
-    public static function addProduct($name, $price, $stock){
-        $db = DB::connect();
-        $query = "INSERT INTO products (name, price, stock) VALUES ($name, $price, $stock)";
-        $db->query($query);
-    }
+        $stmt = $conn->prepare(
+            "SELECT * FROM PRODUCT WHERE product_id = ?"
+        );
 
-    public static function updateProduct($id, $name, $price, $stock){
-        $db = DB::connect();
-        $query = "UPDATE products SET name = $name, price = $price, stock = $stock WHERE id = $id";
-        $db->query($query);
-    }
+        $stmt->bind_param("i", $product_id);
+        $stmt->execute();
 
-    public static function deleteProduct($id){
-        $db = DB::connect();
-        $query = "DELETE FROM products WHERE id = $id";
-        $db->query($query);
-    }
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
 
-    public static function searchProduct($name){
-        $db = DB::connect();
-        $query = "SELECT * FROM products WHERE name LIKE '%$name%'";
-        $products = $db->query($query);
-        return $products;
+        if (!$row) {
+            return null;
+        }
+
+        return new Product(
+            $row['product_id'],
+            $row['description'],
+            $row['price'],
+            $row['stock']
+        );
     }
 }
-?>
