@@ -1,11 +1,11 @@
 <?php
 
-class User{
+class User {
 
     private $id;
     private $username;
-//    private $rol;
-  
+    // private $rol;
+
     public function __construct($id, $username) {
         $this->id = $id;
         $this->username = $username;
@@ -23,5 +23,4 @@ class User{
     /*public function getRol() {
         return $this->rol;
     }*/
-
 }
