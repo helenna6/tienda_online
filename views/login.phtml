@@ -1,27 +1,19 @@
-<?php
-
-class User{
-
-    private $id;
-    private $username;
-//    private $rol;
-  
-    public function __construct($id, $username) {
-        $this->id = $id;
-        $this->username = $username;
-        //$this->rol = $rol;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getUsername() {
-        return $this->username;
-    }
-
-    /*public function getRol() {
-        return $this->rol;
-    }*/
-
-}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tienda Online</title>
+    </head>
+    <body>
+        <form action="index.php?c=user" method="POST">
+            <label for="username">usuario</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">contraseña</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit" name="login">iniciar sesión</button>
+        </form>
+        <br><br>
+        <a href="index.php">Volver a la tienda</a>
+    </body>
+</html>
