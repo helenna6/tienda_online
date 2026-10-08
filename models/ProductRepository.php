@@ -6,7 +6,7 @@
             $result = $conn->query("SELECT * FROM PRODUCT");
             while ($row = $result->fetch_assoc()) {
                 $products[] = new Product($row['product_id'],$row['name'],$row['description'],
-                $row['price'],$row['stock']
+                $row['price'],$row['stock'],$row['created_at']
             );
         }
         return $products;
@@ -17,7 +17,7 @@
         $result = $db->query($query);
         $product = $result->fetch_assoc();
         return new Product($product['product_id'],$product['name'],$product['description'],
-        $product['price'],$product['stock']);
+        $product['price'],$product['stock'],$product['created_at']);
     }
     }
 ?>

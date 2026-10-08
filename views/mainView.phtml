@@ -23,6 +23,7 @@
     echo "<br><br>";
     foreach($products as $product){
         echo $product->getDescription();
+        echo date("d/m/Y H:i", strtotime($product->getCreatedAt()));
     ?>
         <form action="index.php?c=order&add" method="POST">
             <input type="hidden" name="id" <?php echo 'value="'.$product->getId().'"'; ?>>

@@ -5,13 +5,15 @@
         private $description;
         private $price;
         private $stock;
+        private $created_at;
         
-        public function __construct($id, $name, $description, $price, $stock) {
+        public function __construct($id, $name, $description, $price, $stock,$created_at) {
             $this->id = $id;
             $this->name = $name;
             $this->description = $description;
             $this->price = $price;
             $this->stock = $stock;
+            $this->created_at = $created_at;
         }
         public function getId() {
             return $this->id;
@@ -27,6 +29,9 @@
         }
         public function getStock() {
             return $this->stock;
+        }
+        public function getCreatedAt() {
+            return $this->created_at;
         }
     }
 ?>    
