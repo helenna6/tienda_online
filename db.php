@@ -1,7 +1,7 @@
 <?php
-    class db{
-        public static function connect(){
-            return new mysqli($_ENV['DB_HOST'],$_ENV['DB_USER'],$_ENV['DB_PASS'],$_ENV['DB_NAME']);
-        }
+class DB {
+    public static function connect(){
+        return new mysqli(getenv('DB_HOST'), getenv('DB_USER'), getenv('DB_PASS'), getenv('DB_NAME'));
     }
+}
 ?>

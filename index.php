@@ -1,10 +1,11 @@
 <?php
 
-$env = parse_ini_file(__DIR__ . '/.env');
-foreach($env as $key => $value){
-    $_ENV[$key] = $value;
+$env = parse_ini_file(".env");
+foreach ($env as $key => $value) {
+    putenv("$key=$value");
 }
 
 require_once("db.php");
 require_once("controllers/mainController.php");
+
 ?>

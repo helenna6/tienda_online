@@ -7,15 +7,11 @@
 </head>
 <body>
     <form action="index.php?c=product&add" method="POST">
-        <label for="description">descripción</label>
-        <input type="text" id="description" name="description" required>
-        <label for="price">precio</label>
-        <input type="number" id="price" name="price" required>
-        <label for="stock">stock</label>
-        <input type="number" id="stock" name="stock" required>
-        <button type="submit" name="add">añadir</button>
-    </form>
-    <br><br>
-    <a href="index.php">Volver a la tienda</a>
+        <input type="text" name="name" placeholder="nombre del producto"><br><br>
+        <input type="text" name="description" placeholder="descripcion del producto"><br><br>
+        <input type="number" name="price" placeholder="precio del producto"><br><br>
+        <input type="number" name="stock" placeholder="stock del producto"><br><br>
+        <input type="submit" value="Añadir">
+</form>
 </body>
 </html>
