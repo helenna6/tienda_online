@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mostrar pedido</title>
+    </head>
+    <body>
+        <h1>Pedido</h1>
+        <?php
+        echo "fecha ".$order->getDate()."<br>";
+        foreach($order->getOrderLines() as $orderLine){
+            echo $orderLine->getProduct()->getDescription() . ",
+            " . $orderLine->getQuantity() . "," . $orderLine->getPrice() . "<br>";
+        }
+        echo "total: ".$order->getTotal()."<br>";
+        ?>
+    </body>
+</html>
