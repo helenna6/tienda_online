@@ -1,36 +1,30 @@
 <?php
+    class OrderLine{
+        private $id;
+        private $product;
+        private $quantity;
+        private $price;
 
-class OrderLine{
-
-    private $id;
-    private $product;
-    private $quantity;
-    private $price;
-
-    public function __construct($id, $product_id, $quantity, $price, $order_id) {
-        $this->id = $id;
-        $this->product = ProductRepository::getProductById($product_id);
-        $this->quantity = $quantity;
-        $this->price = $price;
+        public function __construct($id, $product_id, $quantity, $price, $order_id) {
+            $this->id = $id;
+            $this->product = ProductRepository::getProductById($product_id);
+            $this->quantity = $quantity;
+            $this->price = $price;
+        }
+        public function getId() {
+            return $this->order_id;
+        }
+        public function getProduct() {
+            return $this->product;
+        }
+        public function getQuantity() {
+            return $this->quantity;
+        }
+        public function getPrice() {
+            return $this->price;
+        }
+        public function getOrder() {
+            return $this->order;
+        }
     }
-
-    public function getId() {
-        return $this->order_id;
-    }
-
-    public function getProduct() {
-        return $this->product;
-    }
-
-    public function getQuantity() {
-        return $this->quantity;
-    }
-
-    public function getPrice() {
-        return $this->price;
-    }
-
-    public function getOrder() {
-        return $this->order;
-    }
-}
+?>
