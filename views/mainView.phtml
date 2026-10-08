@@ -11,18 +11,19 @@
         if(isset($_SESSION['user'])){
             echo "BIENVENIDO " . $_SESSION['user']->getUsername();
             echo " &nbsp;&nbsp; ";
+            echo "<br><br>";
             echo "<a href='index.php?c=product&new'>Subir producto</a>";
             echo " &nbsp;&nbsp; ";
             echo "<a href='index.php?c=user&logout'>Salir</a>";
         }else{
             echo "<a href='index.php?login'>Login</a>";
             echo " &nbsp;&nbsp;&nbsp; ";
-            echo "<a href='index.php?register'>Register</a>";
+            echo "<a href='index.php?register'>Registrarse</a>";
         } ?>
         <br><br><br>
         <?php
             foreach($products as $product){
-                echo $product->getDescription() . "<br>";
+                echo "<a href='index.php?c=product&id=".$product->getProductId(). "'>".$product->getDescription()."</a><br>";
                 echo $product->getPrice() . "<br>";
                 echo $product->getStock() . "<br><br>";
             }
