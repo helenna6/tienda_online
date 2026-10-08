@@ -22,7 +22,8 @@
     if(isset($_POST['register'])){
         if(isset($_POST['name']) && isset($_POST['password']) && isset($_POST['password2'])
             && $_POST['password']==$_POST['password2']){
-                $q="insert into USERS (name, password) values ('".$_POST['name']."', md5('".$_POST['password']."'))";
+                $q="insert into USERS (name, password) values ('".$_POST['name']."',
+                md5('".$_POST['password']."'))";
                 $db= DB::connect();
                 $db->query($q);
                 if($db->insert_id){
