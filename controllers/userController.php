@@ -6,13 +6,13 @@
         exit;
     }
     if(isset($_POST['login'])){
-        if(isset($_POST['username']) && isset($_POST['password'])){
-            $q="select * from users where username='".$_POST['username']."'";
+        if(isset($_POST['name']) && isset($_POST['password'])){
+            $q="select * from USERS where name='".$_POST['name']."'";
             $db=DB::connect();
             $result = $db->query($q);
             if($row=$result->fetch_assoc()){
                 if($row['password']==md5($_POST['password'])){
-                    $_SESSION['user']=new User($row['id'], $row['username']);
+                    $_SESSION['user']=new User($row['user_id'], $row['name']);
                 }
             }
         }
@@ -20,9 +20,9 @@
         exit;
     }
     if(isset($_POST['register'])){
-        if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password2'])
+        if(isset($_POST['name']) && isset($_POST['password']) && isset($_POST['password2'])
             && $_POST['password']==$_POST['password2']){
-                $q="insert into users values (NULL, '".$_POST['username']."', md5('".$_POST['password']."'))";
+                $q="insert into USERS (name, password) values ('".$_POST['name']."', md5('".$_POST['password']."'))";
                 $db= DB::connect();
                 $db->query($q);
                 if($db->insert_id){

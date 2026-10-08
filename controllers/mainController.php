@@ -21,6 +21,10 @@
         require_once('views/register.phtml');
         exit;
     }
-    $products=ProductRepository::getProducts();
+    if(isset($_SESSION['user'])){
+        $products = ProductRepository::getProductsByUserId($_SESSION['user']->getId());
+    }else{
+        $products = [];
+    }
     require_once("views/mainView.phtml");
 ?>
