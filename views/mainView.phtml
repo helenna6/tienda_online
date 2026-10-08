@@ -19,14 +19,23 @@
             echo "<a href='index.php?login'>Login</a>";
             echo " &nbsp;&nbsp;&nbsp; ";
             echo "<a href='index.php?register'>Registrarse</a>";
-        } ?>
-        <br><br><br>
+        }
+        ?>
+        <br><br>
         <?php
-            foreach($products as $product){
-                echo "<a href='index.php?c=product&id=".$product->getProductId(). "'>".$product->getDescription()."</a><br>";
-                echo $product->getPrice() . "<br>";
-                echo $product->getStock() . "<br><br>";
-            }
+        foreach($products as $product){
+            echo "<a href='index.php?c=product&id=".$product->getProductId()."'>";
+            echo $product->getDescription();
+            echo "</a><br>";
+            echo $product->getPrice() . "<br>";
+            echo $product->getStock() . "<br>";
+        ?>
+            <form action="index.php?c=order&add" method="POST">
+                <input type="hidden" name="product_id" value="<?= $product->getProductId() ?>">
+                <button type="submit">Añadir al carrito</button>
+            </form>
+        <?php
+        }
         ?>
     </body>
 </html>
