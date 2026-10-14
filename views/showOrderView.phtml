@@ -1,23 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedido</title>
-</head>
-<body>
-    este es tu pedido<br>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Carrito</title>
+    </head>
+    <body>
+        <?php
+            if(isset($_GET['success'])){
+                echo "<p>¡Pedido realizado correctamente!</p>";
+            }
+        ?>
+        <h2>Carrito</h2>
+        <a href="index.php">Volver a la tienda</a>
+        <br><br>
+        <?php
+            foreach($order->getOrderLines() as $ol){
+                echo $ol->getProduct()->getName();
+                echo " - Precio: ".$ol->getPrice()." € - ";
+                echo "Cantidad: ".$ol->getQuantity()." ";
 
-    <?php
-echo "fecha: ".$order->getDate()."<br>";
+                echo "<form action='index.php?c=order&update' method='POST' style='display:inline;'>";
+                echo "<input type='hidden' name='id' value='".$ol->getId()."'>";
+                echo "<input type='hidden' name='quantity' value='".($ol->getQuantity()-1)."'>";
+                echo "<button type='submit'>-</button>";
+                echo "</form> ";
+                echo "<form action='index.php?c=order&update' method='POST' style='display:inline;'>";
+                echo "<input type='hidden' name='id' value='".$ol->getId()."'>";
+                echo "<input type='hidden' name='quantity' value='".($ol->getQuantity()+1)."'>";
+                echo "<button type='submit'>+</button>";
+                echo "</form>";
+                echo "<br><br>";
+            }
+            echo "Total: ".$order->getTotal()." €";
+            echo "<br><br>";
 
-foreach($order->getOrderLines() as $ol){
-    echo $ol->getProduct()->getName(). " - ".$ol->getQuantity()." - ".$ol->getPrice()."<br>";
-}
-
-echo "total: ".$order->getTotal();
-
-
-?>
-</body>
+            if(count($order->getOrderLines()) > 0){
+                echo "<form action='index.php?c=order&checkout' method='POST'>";
+                echo "<button type='submit'>Realizar pedido</button>";
+                echo "</form>";
+            }
+        ?>
+    </body>
 </html>
