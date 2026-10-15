@@ -12,7 +12,7 @@
             $this->price = $price;
         }
         public function getId() {
-            return $this->order_id;
+            return $this->id; 
         }
         public function getProduct() {
             return $this->product;

@@ -1,5 +1,4 @@
 <?php
-
 if(isset($_GET['new'])){
     require_once("views/newProduct.phtml");
     exit;
@@ -17,13 +16,23 @@ if(isset($_GET['add'])){
 
         $db = DB::connect();
 
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $price = $_POST['price'];
+        $stock = $_POST['stock'];
+        
+        $userId = $_SESSION['user']->getId();
+        if(empty($userId)){
+            die("Error crítico: El usuario actual no tiene un ID válido en la sesión. Cierra sesión, vuelve a iniciarla y prueba de nuevo.");
+        }
+
         $q = "INSERT INTO PRODUCT (name, description, price, stock, user_id)
               VALUES (
-                  '".$_POST['name']."',
-                  '".$_POST['description']."',
-                  ".$_POST['price'].",
-                  ".$_POST['stock'].",
-                  ".$_SESSION['user']->getId()."
+                  '".$name."',
+                  '".$description."',
+                  ".$price.",
+                  ".$stock.",
+                  ".$userId."
               )";
 
         $db->query($q);
@@ -32,5 +41,4 @@ if(isset($_GET['add'])){
     header("Location: index.php");
     exit;
 }
-
 ?>

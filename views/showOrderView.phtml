@@ -6,18 +6,18 @@
     <title>Pedido</title>
 </head>
 <body>
-    este es tu pedido<br>
+    <a href="index.php">volver</a><br><br>
+    este es tu pedido<br><br>
 
     <?php
-echo "fecha: ".$order->getDate()."<br>";
+    echo "fecha: ".$order->getDate()."<br><br>";
 
-foreach($order->getOrderLines() as $ol){
-    echo $ol->getProduct()->getName(). " - ".$ol->getQuantity()." - ".$ol->getPrice()."<br>";
-}
+    foreach($order->getOrderLines() as $ol){
+        echo $ol->getProduct()->getName(). " - Cantidad: ".$ol->getQuantity()." - Precio: ".$ol->getPrice()." ";
+        echo "<a href='index.php?c=order&delete&id=".$ol->getId()."' style='color:red;'>[Eliminar]</a><br>";
+    }
 
-echo "total: ".$order->getTotal();
-
-
-?>
+    echo "<br><strong>total: ".$order->getTotal()."</strong>";
+    ?>
 </body>
 </html>

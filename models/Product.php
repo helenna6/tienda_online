@@ -34,4 +34,4 @@
             return $this->created_at;
         }
     }
-?>    
+?>

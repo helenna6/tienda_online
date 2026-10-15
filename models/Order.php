@@ -19,7 +19,7 @@
             return $this->id;
         }
         public function getBuyer() {
-            return $this->user_id;
+            return $this->buyer;
         }
         public function getTotal() {
             return $this->total_price;
@@ -29,9 +29,6 @@
         }
         public function getDate() {
             return $this->date;
-        }
-        public function getProducts() {
-            return $this->products;
         }
         public function getOrderLines(){
             return $this->orderLines;

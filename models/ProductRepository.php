@@ -2,7 +2,7 @@
     class ProductRepository{
         public static function getProducts(){
             $products = [];
-            $conn = db::connect();
+            $conn = DB::connect();
             $result = $conn->query("SELECT * FROM PRODUCT");
             while ($row = $result->fetch_assoc()) {
                 $products[] = new Product($row['product_id'],$row['name'],$row['description'],
@@ -12,8 +12,11 @@
         }
         public static function getProductsByUserId($user_id){
             $products = [];
+            if(!$user_id) {
+                return $products;
+            }
             $conn = DB::connect();
-            $query = "SELECT * FROM PRODUCT WHERE user_id=".$user_id;
+            $query = "SELECT * FROM PRODUCTS WHERE id=".$user_id;
             $result = $conn->query($query);
             while($row = $result->fetch_assoc()){
                 $products[] = new Product($row['product_id'],$row['name'],$row['description'],
