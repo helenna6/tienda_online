@@ -2,22 +2,33 @@
     class OrderRepository{
         public static function getOrderById($id){
             $db = DB::connect();
-            $query = "SELECT * FROM ORDERS WHERE order_id=".$id;
+            $id = intval($id);
+            $query = "SELECT * FROM ORDERS WHERE order_id = ".$id;
             $result = $db->query($query);
-            $order = $result->fetch_assoc();
-            return new Order($order['order_id'],$order['user_id'],0,$order['date'],$order['status']);
+            $order = $result ? $result->fetch_assoc() : null;
+            if(!$order) return null;
+            $orderId = $order['order_id'];
+            $buyerId = $order['user_id'];
+            $total = 0;
+            return new Order($orderId, $buyerId, $total, $order['date'], $order['status']);
         }
+
         public static function getCarritoByUserId($id){
             $db = DB::connect();
-            $q = "SELECT * FROM ORDERS WHERE status='Pending' AND user_id=".$id;
+            $id = intval($id);
+            $q = "SELECT * FROM ORDERS WHERE status = 'Pending' AND user_id = ".$id;
             $result = $db->query($q);
-            if($row = $result->fetch_assoc()){
-                return new Order($row['order_id'],$row['user_id'],0,$row['date'],$row['status']);
+            if($result && $row = $result->fetch_assoc()){
+                $orderId = $row['order_id'];
+                $buyerId = $row['user_id'];
+                $total = 0;
+                return new Order($orderId, $buyerId, $total, $row['date'], $row['status']);
             }
-            $q = "INSERT INTO ORDERS (user_id, status) VALUES (".$id.", 'Pending')";
+            $fechaActual = date('Y-m-d H:i:s');
+            $q = "INSERT INTO ORDERS (user_id, date, status) VALUES (".$id.", '".$fechaActual."', 'Pending')";
             $db->query($q);
-            $order_id = $db->insert_id;
-            return new Order($order_id,$id,0,date('Y-m-d H:i:s'),'Pending');
+            $newOrderId = $db->insert_id;
+            return new Order($newOrderId, $id, 0, $fechaActual, 'Pending');
         }
     }
 ?>

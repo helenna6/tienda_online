@@ -2,17 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
 </head>
 <body>
-    <a href="index.php">volver</a>
-    <br><br> 
+
+<a href="index.php">volver</a><br>
+    haz login:
+    
+    <?php
+    if(isset($_GET['error'])){
+        echo "<p style='color:red;'>Usuario o contraseña incorrectos</p>";
+    }
+    if(isset($_GET['success'])){
+        echo "<p style='color:green;'>¡Registrado con éxito! Ya puedes entrar</p>";
+    }
+    ?>
+
     <form action="index.php?c=user" method="POST">
-        <input type="text" name="name" placeholder="usuario">
+        <input type="text" name="username" placeholder="usuario">
         <input type="password" name="password" placeholder="contraseña">
-        <input type="submit" name="login">
-</form>
+        <input type="submit" name="login" value="Entrar">
+    </form>
 </body>
 </html>

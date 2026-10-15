@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Panel de Administracion</title>
+    </head>
+    <body>
+        <h2>Panel de Administracion</h2>
+        <a href="index.php">Volver a la tienda</a>
+        <br><br>
+        <h3>Productos:</h3>
+        <?php
+            foreach($allProducts as $p){
+                echo "ID: " . $p->getId() . " - " . $p->getName() . " - Precio: " . $p->getPrice() .
+                " € - Stock: " . $p->getStock() . "<br>";
+            }
+        ?>
+        <br>
+        <h3>Pedidos:</h3>
+        <?php
+            foreach($allOrders as $o){
+                $buyerName = $o->getBuyer() ? $o->getBuyer()->getUsername() : "Desconocido";
+                echo "Pedido ID: " . $o->getId() . " - Usuario: " . $buyerName . " - Total: " .
+                $o->getTotal() . " € - Estado: " . $o->getStatus() . "<br>";
+            }
+        ?>
+        <br>
+        <h3>Usuarios y Roles:</h3>
+        <?php
+            foreach($allUsers as $u){
+                echo "ID: " . $u->getId() . " - Usuario: " . $u->getUsername() . " - Rol: " .
+                $u->getRol() . "<br>";
+            }
+        ?>
+    </body>
+</html>

@@ -10,6 +10,13 @@
 
     session_start();
 
+    if(isset($_SESSION['user'])){
+        if($_SESSION['user']->getRol() == 'admin'){
+            // Mostrar panel de administración
+        }else{
+            // Mostrar zona de usuario normal
+        }
+    }
     if(isset($_GET['c'])){
         require_once("controllers/".$_GET['c']."Controller.php");
     }

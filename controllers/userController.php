@@ -5,13 +5,17 @@
         exit;
     }
     if(isset($_POST['login'])){
-        if(isset($_POST['name']) && isset($_POST['password'])){
-            $q="select * from USERS where name='".$_POST['name']."'";
-            $db=DB::connect();
+        if(isset($_POST['username']) && isset($_POST['password'])){
+            $db = DB::connect();
+            $username = $_POST['username'];
+            $q = "SELECT * FROM USERS WHERE name = '".$username."'";
             $result = $db->query($q);
-            if($row=$result->fetch_assoc()){
-                if($row['password']==md5($_POST['password'])){
-                    $_SESSION['user']=new User($row['user_id'], $row['name']);
+            if($row = $result->fetch_assoc()){
+                if($row['password'] == md5($_POST['password'])){
+                    $userId = $row['user_id'];
+                    $userName = $row['name'];
+                    $userRol = $row['rol'];
+                    $_SESSION['user'] = new User($userId, $userName, $userRol);
                 }
             }
         }
@@ -19,18 +23,26 @@
         exit;
     }
     if(isset($_POST['register'])){
-        if(isset($_POST['name']) && isset($_POST['password']) && isset($_POST['password2'])
-            && $_POST['password']==$_POST['password2']){
-                $q="insert into USERS (name, password) values ('".$_POST['name']."',
-                md5('".$_POST['password']."'))";
-                $db= DB::connect();
-                $db->query($q);
-                if($db->insert_id){
-                    header('location:index.php?login');
-                    exit();
-                }
+        if(isset($_POST['username']) && isset($_POST['password'])
+            && isset($_POST['password2'])
+            && $_POST['password'] == $_POST['password2']){
+            $db = DB::connect();
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $check = $db->query("SELECT * FROM USERS WHERE name = '".$username."'");
+            if(strtolower(trim($username)) == 'admin'){
+                header('location:index.php?register');
+                exit;
+            }
+            $q = "INSERT INTO USERS (name, password, rol) VALUES ('".$username."', md5('".$password."'),
+            'user')";
+            $db->query($q);
+            if($db->insert_id){
+                header('location:index.php?login');
+                exit;
+            }
         }
     }
-    header('location:index.php?register');
-    exit();
+    header('location:index.php');
+    exit;
 ?>
