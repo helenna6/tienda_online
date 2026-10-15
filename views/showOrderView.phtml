@@ -1,23 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedido</title>
+    <title>Carrito</title>
 </head>
 <body>
-    <a href="index.php">volver</a><br><br>
-    este es tu pedido<br><br>
+    <?php
+        if(isset($_GET['success'])){
+            echo "<p style='color:green;'>¡Pedido realizado correctamente!</p>";
+        }
+    ?>
+    <h2>Carrito de la compra</h2>
+    <a href="index.php">Volver a la tienda</a>
+    <br><br>
 
     <?php
-    echo "fecha: ".$order->getDate()."<br><br>";
-
-    foreach($order->getOrderLines() as $ol){
-        echo $ol->getProduct()->getName(). " - Cantidad: ".$ol->getQuantity()." - Precio: ".$ol->getPrice()." ";
-        echo "<a href='index.php?c=order&delete&id=".$ol->getId()."' style='color:red;'>[Eliminar]</a><br>";
+    if($order->getDate()){
+        echo "Fecha: " . $order->getDate() . "<br><br>";
     }
 
-    echo "<br><strong>total: ".$order->getTotal()."</strong>";
+    $lines = $order->getOrderLines();
+    if(count($lines) == 0){
+        echo "<p>Tu carrito está vacío.</p>";
+    } else {
+        foreach($lines as $ol){
+            $prod = $ol->getProduct();
+            $prodName = $prod ? $prod->getName() : "Producto #" . $ol->getId();
+            echo "<strong>" . htmlspecialchars($prodName) . "</strong>";
+            echo " - Precio: " . $ol->getPrice() . " € - ";
+            echo "Cantidad: " . $ol->getQuantity() . " ";
+
+            echo "<form action='index.php?c=order&update' method='POST' style='display:inline;'>";
+            echo "<input type='hidden' name='id' value='".$ol->getId()."'>";
+            echo "<input type='hidden' name='quantity' value='".($ol->getQuantity()-1)."'>";
+            echo "<button type='submit'>-</button>";
+            echo "</form> ";
+
+            echo "<form action='index.php?c=order&update' method='POST' style='display:inline;'>";
+            echo "<input type='hidden' name='id' value='".$ol->getId()."'>";
+            echo "<input type='hidden' name='quantity' value='".($ol->getQuantity()+1)."'>";
+            echo "<button type='submit'>+</button>";
+            echo "</form> ";
+
+            echo "<a href='index.php?c=order&delete&id=".$ol->getId()."' style='color:red; margin-left: 10px;'>[Eliminar]</a>";
+            echo "<br><br>";
+        }
+
+        echo "<strong>Total: " . $order->getTotal() . " €</strong>";
+        echo "<br><br>";
+
+        echo "<form action='index.php?c=order&checkout' method='POST'>";
+        echo "<button type='submit'>Realizar pedido</button>";
+        echo "</form>";
+    }
     ?>
 </body>
 </html>

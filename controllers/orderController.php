@@ -1,40 +1,63 @@
 <?php
-    // Si la acción es añadir un producto al carrito
-    if(isset($_GET['action']) && $_GET['action'] == 'add'){
-        if(isset($_POST['product_id']) && isset($_SESSION['user'])){
-            $db = DB::connect();
-            $userId = $_SESSION['user']->getId();
-            
-            // Obtenemos o creamos el carrito abierto del usuario
-            $carrito = OrderRepository::getCarritoByUserId($userId);
-            $orderId = $carrito->getId();
-            $productId = $_POST['product_id'];
-            
-            // Comprobamos si el producto ya está en las líneas de este pedido
-            $check = $db->query("SELECT * FROM order_lines WHERE order_id = $orderId AND product_id = $productId");
-            
-            if($row = $check->fetch_assoc()){
-                // Si ya existe, le sumamos cantidad (stock en el pedido)
-                $nuevaCantidad = $row['quantity'] + 1;
-                $db->query("UPDATE order_lines SET quantity = $nuevaCantidad WHERE order_id = $orderId AND product_id = $productId");
-            } else {
-                // Si no existe, buscamos su precio y lo insertamos con cantidad 1
-                $prodResult = $db->query("SELECT price FROM product WHERE product_id = $productId");
-                if($pRow = $prodResult->fetch_assoc()){
-                    $precio = $pRow['price'];
-                    $db->query("INSERT INTO order_lines (order_id, product_id, quantity, price) VALUES ($orderId, $productId, 1, $precio)");
-                }
-            }
-            
-            // Recalculamos el precio total del pedido sumando todas sus líneas
-            $totalResult = $db->query("SELECT SUM(quantity * price) AS total FROM order_lines WHERE order_id = $orderId");
-            if($tRow = $totalResult->fetch_assoc()){
-                $nuevoTotal = $tRow['total'] ? $tRow['total'] : 0;
-                $db->query("UPDATE orders SET total_price = $nuevoTotal WHERE id = $orderId");
+    if(isset($_GET['add']) || (isset($_GET['action']) && $_GET['action'] == 'add')){
+        $productId = $_POST['id'] ?? ($_POST['product_id'] ?? null);
+        $quantity = isset($_POST['quantity']) ? intval($_POST['quantity']) : 1;
+
+        if($productId && isset($_SESSION['user'])){
+            $product = ProductRepository::getProductById($productId);
+            if($product){
+                $order = OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
+                OrderLineRepository::addOrderLineToOrder($order, $product, $quantity);
+                header('location: index.php?added=1');
+                exit;
             }
         }
-        
-        header('location:index.php?controller=order&action=carrito');
-        exit();
+        header('location: index.php');
+        exit;
+    }
+
+    if(isset($_GET['update'])){
+        if(isset($_POST['id']) && isset($_POST['quantity'])){
+            $id = $_POST['id'];
+            $quantity = $_POST['quantity'];
+            OrderLineRepository::updateQuantity($id, $quantity);
+        }
+        header('location: index.php?c=order&show');
+        exit;
+    }
+
+    if(isset($_GET['delete'])){
+        if(isset($_GET['id'])){
+            OrderLineRepository::deleteOrderLine($_GET['id']);
+        }
+        header('location: index.php?c=order&show');
+        exit;
+    }
+
+    if(isset($_GET['checkout'])){
+        if(isset($_SESSION['user'])){
+            $order = OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
+            if(count($order->getOrderLines()) > 0){
+                $db = DB::connect();
+                $q = "UPDATE orders SET status='Completed' WHERE id=".$order->getId();
+                if($db->query($q)){
+                    header('Location: index.php?c=order&show&success=1');
+                    exit;
+                }
+            }
+        }
+        header('Location: index.php?c=order&show');
+        exit;
+    }
+
+    if(isset($_GET['show']) || (isset($_GET['action']) && $_GET['action'] == 'carrito')){
+        if(isset($_SESSION['user'])){
+            $order = OrderRepository::getCarritoByUserId($_SESSION['user']->getId());
+            require_once('views/showOrderView.phtml');
+            exit;
+        } else {
+            header('Location: index.php?login');
+            exit;
+        }
     }
 ?>

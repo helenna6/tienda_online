@@ -22,7 +22,11 @@
             return $this->buyer;
         }
         public function getTotal() {
-            return $this->total_price;
+            $total = 0;
+            foreach($this->orderLines as $ol){
+                $total = $total + ($ol->getPrice() * $ol->getQuantity());
+            }
+            return $total;
         }
         public function getStatus() {
             return $this->status;

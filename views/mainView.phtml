@@ -9,14 +9,19 @@
     BIENVENIDOS A LA TIENDA
     <br><br>
     <?php
+        if(isset($_GET['added'])){
+            echo "<p style='color:green;'>¡Producto añadido correctamente!</p>";
+        }
+    ?>
+    <?php
     if(isset($_SESSION['user'])){
         echo "hola ".$_SESSION['user']->getUsername().
         "<br><br>".
         "<a href='index.php?c=order&show'>Ver carrito</a>".
-        " | ".
+        "<br><br>".
         "<a href='index.php?c=user&logout'>Salir</a>";
         if($_SESSION['user']->getRol()=="admin"){
-            echo "<a href='index.php?c=product&new'>Subir producto</a>";
+            echo "<br><br><a href='index.php?c=product&new'>Subir producto</a>";
         }
     }else {
     ?>

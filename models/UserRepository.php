@@ -2,11 +2,15 @@
     class UserRepository {
         public static function getUserById($id) {
             $db = DB::connect();
-            $query = "SELECT * FROM users WHERE id = " . intval($id);
+            $id = intval($id);
+            $query = "SELECT * FROM users WHERE id = " . $id;
             $result = $db->query($query);
             
-            if ($user = $result->fetch_assoc()) {
-                return new User($user['id'], $user['username']);
+            if ($result && $user = $result->fetch_assoc()) {
+                $userId = $user['id'] ?? ($user['user_id'] ?? $id);
+                $username = $user['username'] ?? ($user['name'] ?? '');
+                $rol = $user['rol'] ?? 0;
+                return new User($userId, $username, $rol);
             } else {
                 return null;
             }
